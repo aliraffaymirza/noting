@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        :root {
+            --fia-blue: #0b2545;
+            --fia-navy: #134074;
+            --light-bg: #f4f6f9;
+            --border-color: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-bg);
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--fia-blue);
+            margin: 5px 0;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-style: italic;
+            text-decoration: underline;
+            margin-bottom: 25px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .control-panel {
+            font-family: Arial, sans-serif;
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--fia-navy);
+        }
+
+        input, select, textarea, button {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            background: var(--fia-navy);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+        }
+
+        button:hover {
+            background: var(--fia-blue);
+        }
+
+        .btn-success { background: #15803d; }
+        .btn-success:hover { background: #166534; }
+        .btn-word { background: #1e40af; }
+        .btn-word:hover { background: #1e3a8a; }
+        .btn-danger { background: #b91c1c; }
+        .btn-danger:hover { background: #991b1b; }
+
+        .editor-table-container {
+            font-family: Arial, sans-serif;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        table.editor-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table.editor-table th, table.editor-table td {
+            border: 1px solid #cbd5e1;
+            padding: 6px;
+            text-align: left;
+        }
+
+        table.editor-table th {
+            background-color: var(--fia-navy);
+            color: white;
+        }
+
+        /* Standard A4 Page Layout Container */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10px auto;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            border: 1px solid #d1d5db;
+        }
+
+        .doc-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-size: 12pt;
+        }
+
+        table.proforma-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        /* 11pt Font Size for Document Table Entries */
+        table.proforma-table th, table.proforma-table td {
+            border: 1px solid #000;
+            padding: 5px 7px;
+            vertical-align: top;
+            font-size: 11pt;
+        }
+
+        table.proforma-table th {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        table.proforma-table td.col-sr {
+            width: 5%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* 12pt Font Size for Legal Paragraph Block */
+        .paragraph-block {
+            margin-top: 25px;
+            line-height: 1.5;
+            font-size: 12pt;
+            text-align: justify;
+        }
+
+        .signature-block {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+
+        .sig-right { text-align: right; text-decoration: underline; }
+        .sig-left { text-align: left; text-decoration: underline; }
+
+        /* Exact A4 Printing Media Queries */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 15mm 15mm 15mm 15mm;
+            }
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                color: #000 !important;
+            }
+            .container {
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .a4-page {
+                width: 100% !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            table.proforma-table th, table.proforma-table td {
+                border: 1px solid #000 !important;
+                font-size: 11pt !important;
+            }
+            .paragraph-block, .signature-block {
+                font-size: 12pt !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Dynamic Datalists for Auto-Learning Custom Fields -->
+<datalist id="circleList">
+    <option value="AHTC FSD">
+    <option value="AHTC SWL">
+    <option value="AHTC SGD">
+    <option value="ACC FSD">
+    <option value="ACC SWL">
+    <option value="ACC SGD">
+    <option value="CBC FSD">
+    <option value="CBC SWL">
+    <option value="CBC SGD">
+</datalist>
+
+<datalist id="currencyList">
+    <option value="Rs.">
+    <option value="PKR">
+    <option value="USD">
+    <option value="EUR">
+    <option value="GBP">
+    <option value="AED">
+</datalist>
+
+<datalist id="countryList">
+    <option value="Saudi Arabia">
+    <option value="Qatar">
+    <option value="Malaysia">
+    <option value="UAE">
+    <option value="UK">
+    <option value="Italy">
+    <option value="Oman">
+    <option value="Cambodia">
+</datalist>
+
+<datalist id="reasonList">
+    <option value="Compromise">
+    <option value="Non-pursuance">
+</datalist>
+
+<div class="container">
+    <div class="no-print">
+        <h1>Federal Investigation Agency</h1>
+        <h2>Zonal Board Summary Generator</h2>
+        <div class="subtitle">Faisalabad Zone & Field Circles</div>
+
+        <!-- Sticky Controls Bar -->
+        <div class="control-panel">
+            <div class="control-group">
+                <label>Dispatch Prefix</label>
+                <input type="text" id="dispatchPrefix" value="DD/FIA/FSD/" oninput="saveAndRender()">
+            </div>
+            <div class="control-group">
+                <label>Constant Date</label>
+                <input type="text" id="constantDate" value="31.12.2025" oninput="saveAndRender()">
+            </div>
+            <div class="control-group">
+                <label>Global Currency Prefix</label>
+                <input type="text" id="globalCurrency" list="currencyList" value="Rs." oninput="saveAndRender()">
+            </div>
+            <div class="control-group">
+                <label>Pattern Type</label>
+                <select id="patternSelect" onchange="switchPattern()">
+                    <option value="fsd">Pattern 1: Faisalabad (Non-Pursuance / Compromised)</option>
+                    <option value="swl">Pattern 2: Sahiwal (Scrutiny Committee Compromised)</option>
+                    <option value="sgd">Pattern 3: Sargodha (Compromised)</option>
+                </select>
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <button onclick="addRow()" class="btn-success">+ Add Enquiry</button>
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <button onclick="exportToWord()" class="btn-word">Export to MS Word (.doc)</button>
+            </div>
+            <div class="control-group" style="justify-content: flex-end;">
+                <button onclick="triggerPrint()">Print / Save A4 PDF</button>
+            </div>
+        </div>
+
+        <!-- Editable Table Input Section -->
+        <div class="editor-table-container">
+            <table class="editor-table">
+                <thead>
+                    <tr>
+                        <th style="width: 4%;">Sr #</th>
+                        <th style="width: 14%;">Enquiry No.</th>
+                        <th style="width: 13%;">Circle Name</th>
+                        <th style="width: 13%;">Dispatch #</th>
+                        <th style="width: 10%;">Currency</th>
+                        <th style="width: 15%;">Amount</th>
+                        <th style="width: 13%;">Country</th>
+                        <th style="width: 13%;">Reason</th>
+                        <th style="width: 5%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="editorTableBody">
+                    <!-- Dynamic editor rows injected -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Editable Paragraph Section -->
+        <div class="control-group" style="margin-bottom: 25px;">
+            <label style="font-size: 14px; font-weight: bold; color: var(--fia-navy);">Editable Recommendation Paragraph (12pt):</label>
+            <textarea id="paraInput" rows="4" style="width: 100%; font-family: 'Times New Roman', serif; font-size: 12pt;" oninput="saveAndRender()"></textarea>
+        </div>
+    </div>
+
+    <!-- Official Document Preview Container (Exact A4 Metric Setup) -->
+    <div class="a4-page" id="documentArea">
+        <div class="doc-header">
+            <div style="text-decoration: underline;" id="docHeadingTitle">RECOMMENDATION FOR CLOSURE OF ENQUIRIES OF FIA FAISALABAD DUE TO NON-PURSUANCE/COMPROMISED.</div>
+            <div style="margin-top: 15px; font-weight: normal; text-align: left; font-size: 12pt;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Field unit has forwarded the following enquiries with recommendation for closure on the grounds of non-pursuance/compromised.
+            </div>
+        </div>
+
+        <table class="proforma-table" id="summaryTable">
+            <thead>
+                <tr>
+                    <th style="width: 6%;">Sr #</th>
+                    <th style="width: 14%;">Enquiry No.</th>
+                    <th style="width: 12%;">Circle Name</th>
+                    <th style="width: 25%;">Circle Dispatch</th>
+                    <th style="width: 16%;">Amount</th>
+                    <th style="width: 12%;">Country</th>
+                    <th style="width: 15%;">Reason of closure</th>
+                </tr>
+            </thead>
+            <tbody id="docTableBody">
+                <!-- Preview rows injected (11pt) -->
+            </tbody>
+        </table>
+
+        <div id="paragraphBlock" class="paragraph-block">
+            <!-- Rendered paragraph (12pt) -->
+        </div>
+
+        <div class="signature-block">
+            <div class="sig-left">
+                <br><br>
+                <span id="directorSigText">The Director FIA FAISALABAD</span>
+            </div>
+            <div class="sig-right">
+                <u>Deputy Director / Law</u>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Subcontinental Formatting Logic (Lakhs / Crores)
+    function formatSouthAsianNumber(valStr, currencySymbol) {
+        if (!valStr) return valStr;
+        let cleaned = valStr.toString().replace(/[^0-9]/g, '');
+        if (!cleaned) return valStr;
+        
+        let num = parseInt(cleaned, 10);
+        if (isNaN(num)) return valStr;
+
+        let s = num.toString();
+        let lastThree = s.substring(s.length - 3);
+        let otherNumbers = s.substring(0, s.length - 3);
+        if (otherNumbers !== '') {
+            lastThree = ',' + lastThree;
+        }
+        let formatted = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        
+        const curr = currencySymbol !== undefined && currencySymbol !== null ? currencySymbol : "Rs.";
+        return curr + " " + formatted + "/-";
+    }
+
+    // Default Datasets matching official patterns
+    let dataset = [
+        { enq: "1822/2025", circle: "AHTC FSD", num: "8261", currency: "Rs.", amount: "450000", country: "Saudi Arabia", reason: "Compromise" },
+        { enq: "1808/2025", circle: "AHTC FSD", num: "8261", currency: "Rs.", amount: "500000", country: "Qatar", reason: "Compromise" },
+        { enq: "161/2024",  circle: "AHTC FSD", num: "8261", currency: "Rs.", amount: "500000", country: "Malaysia", reason: "Compromise" },
+        { enq: "1822/2024", circle: "AHTC FSD", num: "8261", currency: "Rs.", amount: "348000", country: "Saudi Arabia", reason: "Non-pursuance" },
+        { enq: "947/2024",  circle: "AHTC FSD", num: "8261", amount: "200000", country: "UAE", reason: "Non-pursuance" }
+    ];
+
+    const defaultParas = {
+        fsd: "The above mentioned CFRs perused which reveals that in some enquiries, dispute resolve through compromise between parties (copy of affidavit enclosed) whereas in other enquiries, complainants failed to join the enquiry proceeding despite issuance and personal service of notices (copy of notices enclosed). Therefore, I do agree with the recommendations of field unit for closure of enquiries as reasons mentioned above in Column 07 of the table as actions of complainants shows they are not willing pursue their enquiries.",
+        swl: "The above mentioned CFRs perused which reveals that above mentioned enquiries, dispute resolved through compromise between parties. Moreover, Scrutiny Committee also perused and agreed of recommendations of field unit. Therefore, I do agree with the recommendations of field unit for closure of enquiries as reasons mentioned above in Column 07 of the table as actions of complainants shows they are not willing to pursue their enquiries.",
+        sgd: "The above mentioned CFRs perused which reveals that dispute resolved through compromise between parties (copy of affidavit enclosed). Therefore, I do agree with the recommendations of field unit for closure of enquiries as reasons mentioned above in Column 07 of the table as actions of complainants shows they are not willing to pursue their enquiries."
+    };
+
+    function switchPattern() {
+        const pattern = document.getElementById('patternSelect').value;
+        document.getElementById('paraInput').value = defaultParas[pattern];
+        
+        if (pattern === 'swl') {
+            document.getElementById('docHeadingTitle').innerText = "RECOMMENDATION FOR CLOSURE OF ENQUIRIES OF FIA SAHIWAL DUE TO COMPROMISED.";
+            document.getElementById('dispatchPrefix').value = "DD/FIA/SWL/";
+        } else if (pattern === 'sgd') {
+            document.getElementById('docHeadingTitle').innerText = "RECOMMENDATION FOR CLOSURE OF ENQUIRIES OF FIA SARGODHA DUE TO COMPROMISED.";
+            document.getElementById('dispatchPrefix').value = "DD/FIA/SGD/";
+        } else {
+            document.getElementById('docHeadingTitle').innerText = "RECOMMENDATION FOR CLOSURE OF ENQUIRIES OF FIA FAISALABAD DUE TO NON-PURSUANCE/COMPROMISED.";
+            document.getElementById('dispatchPrefix').value = "DD/FIA/FSD/";
+        }
+        
+        saveAndRender();
+    }
+
+    function renderEditorTable() {
+        const tbody = document.getElementById('editorTableBody');
+        tbody.innerHTML = '';
+        const globalCurr = document.getElementById('globalCurrency').value;
+
+        dataset.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            const rowCurrency = row.currency || globalCurr || "Rs.";
+            tr.innerHTML = `
+                <td style="text-align: center; font-weight: bold;">${index + 1}</td>
+                <td><input type="text" value="${row.enq}" oninput="updateRow(${index}, 'enq', this.value)" style="width: 90%;"></td>
+                <td><input type="text" list="circleList" value="${row.circle}" oninput="updateRow(${index}, 'circle', this.value)" style="width: 90%;"></td>
+                <td><input type="text" value="${row.num}" oninput="updateRow(${index}, 'num', this.value)" style="width: 90%;"></td>
+                <td><input type="text" list="currencyList" value="${rowCurrency}" oninput="updateRow(${index}, 'currency', this.value)" style="width: 90%;"></td>
+                <td><input type="text" value="${row.amount}" onblur="formatRowAmount(${index}, this.value)" style="width: 90%;"></td>
+                <td><input type="text" list="countryList" value="${row.country}" oninput="updateRow(${index}, 'country', this.value)" style="width: 90%;"></td>
+                <td><input type="text" list="reasonList" value="${row.reason}" oninput="updateRow(${index}, 'reason', this.value)" style="width: 90%;"></td>
+                <td style="text-align: center;"><button class="btn-danger" onclick="deleteRow(${index})">X</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function updateRow(index, field, value) {
+        dataset[index][field] = value;
+        saveAndRender(false);
+    }
+
+    function formatRowAmount(index, value) {
+        dataset[index].amount = value;
+        renderEditorTable();
+        saveAndRender();
+    }
+
+    function addRow() {
+        const globalCurr = document.getElementById('globalCurrency').value || "Rs.";
+        dataset.push({ enq: "", circle: "AHTC FSD", num: "8261", currency: globalCurr, amount: "", country: "", reason: "Compromise" });
+        renderEditorTable();
+        saveAndRender();
+    }
+
+    function deleteRow(index) {
+        dataset.splice(index, 1);
+        renderEditorTable();
+        saveAndRender();
+    }
+
+    function saveAndRender(reRenderEditor = true) {
+        if (reRenderEditor) renderEditorTable();
+
+        const prefix = document.getElementById('dispatchPrefix').value;
+        const dateStr = document.getElementById('constantDate').value;
+        const globalCurr = document.getElementById('globalCurrency').value || "Rs.";
+        const docTbody = document.getElementById('docTableBody');
+        const pattern = document.getElementById('patternSelect').value;
+        const customParaText = document.getElementById('paraInput').value;
+
+        docTbody.innerHTML = '';
+
+        dataset.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            const rowCurr = row.currency || globalCurr;
+            const formattedAmt = formatSouthAsianNumber(row.amount, rowCurr);
+            tr.innerHTML = `
+                <td class="col-sr">${index + 1}.</td>
+                <td style="font-weight: bold;">${row.enq}</td>
+                <td>${row.circle}</td>
+                <td>${prefix}${row.num}<br>DATED ${dateStr}</td>
+                <td>${formattedAmt}</td>
+                <td>${row.country}</td>
+                <td>${row.reason}</td>
+            `;
+            docTbody.exportToWord = true;
+            docTbody.appendChild(tr);
+        });
+
+        const paraBlock = document.getElementById('paragraphBlock');
+        const firstParaNum = pattern === 'swl' ? '2.' : '3.';
+        const secondParaNum = pattern === 'swl' ? '3.' : '4.';
+        const dirSigNum = pattern === 'swl' ? '4.' : '5.';
+
+        paraBlock.innerHTML = `
+            <p>${firstParaNum} &nbsp;&nbsp;&nbsp;&nbsp;${customParaText}</p>
+            <p>${secondParaNum} &nbsp;&nbsp;&nbsp;&nbsp;Submitted for approval of recommendation of field unit please.</p>
+        `;
+
+        document.getElementById('directorSigText').innerHTML = `${dirSigNum} &nbsp;&nbsp;&nbsp;&nbsp;<strong><u>The Director FIA FAISALABAD</u></strong>`;
+    }
+
+    // Reliable Print Trigger Procedure
+    function triggerPrint() {
+        setTimeout(function() {
+            window.print();
+        }, 100);
+    }
+
+    // Direct MS Word (.doc) Export Function with Strict Word-Compatible Inline Styles (11pt & 12pt)
+    function exportToWord() {
+        const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+            "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+            "xmlns='http://www.w3.org/TR/REC-html40'>" +
+            "<head><meta charset='utf-8'><title></title>" +
+            "<style>" +
+            "@page Section1 {size: 595.3pt 841.9pt; margin: 1.0in 1.0in 1.0in 1.0in; mso-header-margin: 35.4pt; mso-footer-margin: 35.4pt; mso-paper-source: 0;}" +
+            "div.Section1 {page: Section1;}" +
+            "body {font-family: 'Times New Roman', serif; font-size: 12pt;}" +
+            "table {width: 100%; border-collapse: collapse; margin-top: 10px;}" +
+            "table th, table td {border: 1px solid black; padding: 5px; font-size: 11pt !important; mso-bidi-font-size: 11.0pt; vertical-align: top;}" +
+            "th {text-align: center; font-weight: bold; font-size: 11pt !important;}" +
+            "p, div {font-size: 12pt !important; mso-bidi-font-size: 12.0pt; line-height: 1.5;}" +
+            ".doc-header {font-size: 12pt !important; text-align: center; font-weight: bold;}" +
+            ".paragraph-block {font-size: 12pt !important; margin-top: 25px; text-align: justify;}" +
+            ".signature-block {margin-top: 50px; font-weight: bold; font-size: 12pt !important;}" +
+            "</style></head><body><div class='Section1'>";
+
+        const docContent = document.getElementById("documentArea").innerHTML;
+        const footer = "</div></body></html>";
+        const sourceHTML = header + docContent + footer;
+
+        const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        const fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        fileDownload.download = 'Summary_Memo_A4.doc';
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+
+    window.onload = function() {
+        document.getElementById('paraInput').value = defaultParas.fsd;
+        renderEditorTable();
+        saveAndRender();
+    };
+</script>
+
+</body>
+</html>
